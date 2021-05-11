@@ -24,8 +24,8 @@ public class Pedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
+
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instante;
 
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
@@ -62,7 +62,7 @@ public class Pedido implements Serializable {
 
 		return itens.stream().map(x -> x.getSubTotal()).reduce(Double::sum).orElse(0.0);
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
