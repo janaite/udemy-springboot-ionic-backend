@@ -1,8 +1,6 @@
 package net.janaite.cursomc.resources.exception;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FieldMessage implements Serializable {
 	private static final long serialVersionUID = 1L;

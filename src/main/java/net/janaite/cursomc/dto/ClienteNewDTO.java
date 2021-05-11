@@ -2,21 +2,46 @@ package net.janaite.cursomc.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import net.janaite.cursomc.services.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty(message = "Required field")
+	@Length(min = 5, max = 120, message = "Length MUST BE between 5 and 120 chars")
 	private String nome;
+	
+	@NotEmpty(message = "Required field")
+	@Email(message = "Invalid email")
 	private String email;
+	
+	@NotEmpty(message = "Required field")
 	private String cpfOuCnpj;
+	
 	private Integer tipo;
 	
+	@NotEmpty(message = "Required field")
 	private String logradouro;
+	
+	@NotEmpty(message = "Required field")
 	private String numero;
+	
 	private String complemento;
+	
 	private String bairro;
+	
+	@NotEmpty(message = "Required field")
 	private String cep;
 	
+	@NotEmpty(message = "Required field")
 	private String telefone1;
+	
 	private String telefone2;
 	private String telefone3;
 	
