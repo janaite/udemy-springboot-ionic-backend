@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import net.janaite.cursomc.domain.Cidade;
 import net.janaite.cursomc.domain.Cliente;
 import net.janaite.cursomc.domain.Endereco;
+import net.janaite.cursomc.domain.enums.Perfil;
 import net.janaite.cursomc.domain.enums.TipoCliente;
 import net.janaite.cursomc.dto.ClienteDTO;
 import net.janaite.cursomc.dto.ClienteNewDTO;
 import net.janaite.cursomc.repositories.ClienteRepository;
 import net.janaite.cursomc.repositories.EnderecoRepository;
+import net.janaite.cursomc.security.UserSS;
+import net.janaite.cursomc.services.exceptions.AuthorizationException;
 import net.janaite.cursomc.services.exceptions.DataIntegrityException;
 import net.janaite.cursomc.services.exceptions.ObjectNotFoundException;
 
@@ -34,8 +37,14 @@ public class ClienteService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-
+	
 	public Cliente find(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Access Denied");
+		}
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				String.format("Object not found! Id: %d, type: %s", id, Cliente.class.getName())));
