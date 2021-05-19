@@ -10,6 +10,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FilenameUtils;
+import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,15 +41,27 @@ public class ImageService {
 		jpgImage.createGraphics().drawImage(img, 0, 0, Color.WHITE, null);
 		return jpgImage;
 	}
-	
+
 	public InputStream getInputStream(BufferedImage img, String extension) {
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			ImageIO.write(img, extension, os);
 			return new ByteArrayInputStream(os.toByteArray());
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			throw new FileException("Error reading file");
 		}
 	}
+
+	public BufferedImage cropSquared(BufferedImage sourceImg) {
+		final int min = Math.min(sourceImg.getWidth(), sourceImg.getHeight());
+		final int w = (sourceImg.getWidth() / 2) - (min / 2);
+		final int h = (sourceImg.getHeight() / 2) - (min / 2);
+
+		return Scalr.crop(sourceImg, w, h, min, min);
+	}
+	
+	public BufferedImage resize(BufferedImage sourceImg, int size) {
+		return Scalr.resize(sourceImg, Scalr.Method.ULTRA_QUALITY, size);
+	}
+
 }
